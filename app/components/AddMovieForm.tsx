@@ -1,19 +1,43 @@
 import { Movie } from "./Movie";
 
-export function AddMovieForm() {
-    let titleOfMovieParam: string = (document.getElementById("search-field") as HTMLInputElement).value;
-    let ratingWithStarsParam: number = parseInt((document.getElementById("rating") as HTMLSelectElement).value);
+interface AddMovieFormProps {
+    onAddMovie: (title: string, rating: number) => void;
+}
+
+export function AddMovieForm({ onAddMovie }: AddMovieFormProps) {
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        const form = e.target as HTMLFormElement;
+        const titleOfMovieElement = form.querySelector<HTMLInputElement>("#search-field");
+        const ratingSelectedElement = form.querySelector<HTMLSelectElement>("#rating");
+
+        if (titleOfMovieElement == null || ratingSelectedElement == null) {
+            return;
+        }
+        
+        const title = titleOfMovieElement.value;
+        const rating = parseInt(ratingSelectedElement.value);
+        
+        if (title.length < 3 || rating === 0) {
+            alert("Title must be at least 3 characters and rating must be selected.");
+            return;
+        }
+
+        onAddMovie(title, rating);
+        form.reset(); // resets the form fields.
+    }
+
     return (
         <div>
             <h2>Add Movie</h2>
-            <form id="add-movie-form">
+            <form id="add-movie-form" onSubmit={handleSubmit}>
                 <fieldset>
-                    <legend>Search for movies here</legend>
-                    <label htmlFor="search-field">Title:</label>
-                    <input type="text" id="search-field" className="form-control" placeholder="Write something (minimum 3 characters)" required />
+                    <label htmlFor="search-field">Title</label>
+                    <input type="text" id="search-field" className="form-control" placeholder="Write something (minimum 3 characters)" required/>
 
-                    <label htmlFor="search-field">Rating:</label>
-                    <select name="rating" id="rating" className="form-control">
+                    <label htmlFor="search-field">Rating</label>
+                    <select name="rating" id="rating" className="form-control" defaultValue="0" required>
                         <option value="0" selected>Choose rating here</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -22,31 +46,8 @@ export function AddMovieForm() {
                         <option value="5">5</option>
                     </select>
                 </fieldset>
-                <button type="submit" className="form-control" onClick={checkValuesOK(titleOfMovieParam, ratingWithStarsParam)}>Add Movie</button>
+                <button type="submit" className="form-control" id="submit-btn">Add Movie</button>
             </form>
         </div>
     );
-}
-
-
-function checkValuesOK(title: string, rating: number): boolean {
-    if (title.length < 3 || rating == 0) {
-        alert("Title must be at least 3 characters long and rating cannot be undefined.");
-        return false;
-    }
-
-    addMovie(title, rating);
-    return true;
-
-}
-
-function addMovie(title: string, rating: number): JSX.Element {
-    let movie = {
-        title: title,
-        rating: rating
-    };
-
-    document.getElementById
-    return <Movie titleOfMovie={movie.title} ratingWithStars={movie.rating} />;
-
 }

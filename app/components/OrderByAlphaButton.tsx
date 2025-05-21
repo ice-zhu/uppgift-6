@@ -1,11 +1,12 @@
 type AlphaButtonProps = {
     nameOfButton: string;
+    onClick: () => void;
 };
 
-export function OrderByAlphaButton({ nameOfButton }: AlphaButtonProps) {
+export function OrderByAlphaButton({ nameOfButton, onClick }: AlphaButtonProps) {
     return (
         <div>
-            <button className="grade-button" id="grade-button" onClick={sortByAlphabet}>
+            <button className="grade-button" id="grade-button" onClick={onClick}>
                 {nameOfButton}
             </button>
         </div>

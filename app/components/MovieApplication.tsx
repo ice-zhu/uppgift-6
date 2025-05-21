@@ -20,15 +20,33 @@ export function MovieApplication() {
         setMovies([...movies, newMovie]);
     }
 
+    function sortMoviesByRating() {
+        const sorted = [...movies].sort ((i, j) =>
+        j.ratingWithStars - i.ratingWithStars);
+        setMovies(sorted);
+    }
+
+    function sortMoviesByTitle() {
+        const sorted = [...movies].sort((i, j) =>
+        i.titleOfMovie.localeCompare(j.titleOfMovie));
+        setMovies(sorted);
+    }
+
+    function onDeleteMovie(index: number) {
+        const updatedMovies = [...movies];
+        updatedMovies.splice(index, 1);
+        setMovies(updatedMovies);
+    } 
+
     return (
         <main>
             <div className="movie-application">
                 <h1>Movie Finder</h1>
-                <AddMovieForm />
-                <ListOfMovies movies={movies}/>
+                <AddMovieForm onAddMovie={addMovie}/>
+                <ListOfMovies movies={movies} onDeleteMovie={onDeleteMovie}/>
                 <div className="order-buttons">
-                    <OrderByAlphaButton nameOfButton="Sort by Alphabet" />
-                    <OrderByGradeButton nameOfButton="Sort by Grade" />
+                    <OrderByAlphaButton nameOfButton="Sort by Alphabet" onClick={sortMoviesByTitle}/>
+                    <OrderByGradeButton nameOfButton="Sort by Grade" onClick={sortMoviesByRating}/>
                 </div>
             </div>
         </main>
